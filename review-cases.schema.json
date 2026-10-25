@@ -1,0 +1,294 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:markdownlogic:perplexity:evaluation:1.0.0",
+  "title": "Markdown Logic Perplexity synthetic evaluation specification",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "specification_version",
+    "client",
+    "endpoint",
+    "authentication",
+    "status",
+    "scope",
+    "supported_team_roles",
+    "actors",
+    "cases"
+  ],
+  "properties": {
+    "specification_version": {
+      "const": "1.0.0"
+    },
+    "client": {
+      "const": "Perplexity"
+    },
+    "endpoint": {
+      "const": "https://mcp.markdownlogic.com/"
+    },
+    "authentication": {
+      "type": "string",
+      "minLength": 1
+    },
+    "status": {
+      "const": "NOT_EXECUTED"
+    },
+    "scope": {
+      "type": "string",
+      "minLength": 1
+    },
+    "supported_team_roles": {
+      "const": [
+        "owner",
+        "admin",
+        "member",
+        "viewer"
+      ]
+    },
+    "actors": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "editor",
+        "reader",
+        "viewer",
+        "outsider"
+      ],
+      "properties": {
+        "editor": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "role",
+            "granted_scopes",
+            "team"
+          ],
+          "properties": {
+            "role": {
+              "enum": [
+                "owner",
+                "admin",
+                "member",
+                "viewer"
+              ]
+            },
+            "granted_scopes": {
+              "type": "array",
+              "minItems": 1,
+              "uniqueItems": true,
+              "items": {
+                "enum": [
+                  "documents:read",
+                  "documents:write",
+                  "projects:read",
+                  "releases:read"
+                ]
+              }
+            },
+            "team": {
+              "enum": [
+                "review_team",
+                "other_synthetic_team"
+              ]
+            }
+          }
+        },
+        "reader": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "role",
+            "granted_scopes",
+            "team"
+          ],
+          "properties": {
+            "role": {
+              "enum": [
+                "owner",
+                "admin",
+                "member",
+                "viewer"
+              ]
+            },
+            "granted_scopes": {
+              "type": "array",
+              "minItems": 1,
+              "uniqueItems": true,
+              "items": {
+                "enum": [
+                  "documents:read",
+                  "documents:write",
+                  "projects:read",
+                  "releases:read"
+                ]
+              }
+            },
+            "team": {
+              "enum": [
+                "review_team",
+                "other_synthetic_team"
+              ]
+            }
+          }
+        },
+        "viewer": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "role",
+            "granted_scopes",
+            "team"
+          ],
+          "properties": {
+            "role": {
+              "enum": [
+                "owner",
+                "admin",
+                "member",
+                "viewer"
+              ]
+            },
+            "granted_scopes": {
+              "type": "array",
+              "minItems": 1,
+              "uniqueItems": true,
+              "items": {
+                "enum": [
+                  "documents:read",
+                  "documents:write",
+                  "projects:read",
+                  "releases:read"
+                ]
+              }
+            },
+            "team": {
+              "enum": [
+                "review_team",
+                "other_synthetic_team"
+              ]
+            }
+          }
+        },
+        "outsider": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "role",
+            "granted_scopes",
+            "team"
+          ],
+          "properties": {
+            "role": {
+              "enum": [
+                "owner",
+                "admin",
+                "member",
+                "viewer"
+              ]
+            },
+            "granted_scopes": {
+              "type": "array",
+              "minItems": 1,
+              "uniqueItems": true,
+              "items": {
+                "enum": [
+                  "documents:read",
+                  "documents:write",
+                  "projects:read",
+                  "releases:read"
+                ]
+              }
+            },
+            "team": {
+              "enum": [
+                "review_team",
+                "other_synthetic_team"
+              ]
+            }
+          }
+        }
+      }
+    },
+    "cases": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "id",
+          "polarity",
+          "title",
+          "actor",
+          "prerequisites",
+          "prompt",
+          "expected_tools",
+          "forbidden_tools",
+          "expected_outcomes",
+          "actual_client_status"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^[PN][0-9]{2}$"
+          },
+          "polarity": {
+            "enum": [
+              "positive",
+              "negative"
+            ]
+          },
+          "title": {
+            "type": "string",
+            "minLength": 1
+          },
+          "actor": {
+            "enum": [
+              "editor",
+              "reader",
+              "viewer",
+              "outsider"
+            ]
+          },
+          "prerequisites": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            },
+            "minItems": 1
+          },
+          "prompt": {
+            "type": "string",
+            "minLength": 1
+          },
+          "expected_tools": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "pattern": "^[a-z][a-z0-9_]+$"
+            }
+          },
+          "forbidden_tools": {
+            "type": "array",
+            "uniqueItems": true,
+            "items": {
+              "type": "string",
+              "pattern": "^[a-z][a-z0-9_]+$"
+            }
+          },
+          "expected_outcomes": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            },
+            "minItems": 1
+          },
+          "actual_client_status": {
+            "const": "NOT_EXECUTED"
+          }
+        }
+      }
+    }
+  }
+}
